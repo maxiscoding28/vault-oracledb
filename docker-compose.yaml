@@ -1,0 +1,22 @@
+services:
+  vault:
+    container_name: vault
+    image: maxtwinslow1/ubuntu-vault:latest
+    volumes:
+      - ./config.hcl:/vault/config/config.hcl
+      - ./data:/opt/vault/data
+      - ./client:/vault/client
+      - ./plugin:/vault/plugin
+    cap_add:
+      - "IPC_LOCK"
+    env_file:
+      - ./license.env
+    environment:
+      - VAULT_ADDR=http://127.0.0.1:8200
+      - LD_LIBRARY_PATH=/vault/client/instantclient_19_17
+    command: vault server -config=/vault/config/config.hcl
+  oracle:
+    container_name: oracle-xe
+    image: gvenzl/oracle-xe
+    environment:
+      - ORACLE_PASSWORD=rootpassword
